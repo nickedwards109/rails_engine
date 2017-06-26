@@ -15,4 +15,16 @@ describe "Items API" do
     expect(item).to have_key("name")
     expect(item).to have_key("description")
   end
+
+  it "sends a single item" do
+    item = create(:item)
+    id = item.id
+
+    get "/api/v1/items/#{id}.json"
+    expect(response).to be_success
+
+    raw_item = JSON.parse(response.body)
+    expect(raw_item["name"]).to eq(item.name)
+    expect(raw_item["description"]).to eq(item.description)
+  end
 end
