@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      resources :items, only: [:index, :show]
+      namespace :items do
+        get '/find', to: "find_item_by_attribute#show"
+        get ':id', to: "items#show"
+        get '/', to: "items#index"
+      end
     end
   end
 end
