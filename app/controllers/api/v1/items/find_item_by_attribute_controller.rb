@@ -1,10 +1,10 @@
 class Api::V1::Items::FindItemByAttributeController < ApplicationController
   def show
-    render json: Item.find_by(item_params)
+    render json: Item.find_case_insensitive(item_params)
   end
 
   def index
-    render json: Item.where(item_params)
+    render json: Item.find_all_case_insensitive(item_params)
   end
 
   private

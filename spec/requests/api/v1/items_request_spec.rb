@@ -53,26 +53,31 @@ describe "Items API" do
     raw_item = JSON.parse(response.body)
     expect(raw_item["unit_price"]).to eq(item.unit_price)
 
-  # commented out tests are not passing yet
-    # get "/api/v1/items/find?created_at=#{item.created_at}"
-    # expect(response).to be_success
-    # raw_item = JSON.parse(response.body)
-    # expect(raw_item["created_at"]).to eq(item.created_at)
-    #
-    # get "/api/v1/items/find?updated_at=#{item.updated_at}"
-    # expect(response).to be_success
-    # raw_item = JSON.parse(response.body)
-    # expect(raw_item["updated_at"]).to eq(item.updated_at)
+    get "/api/v1/items/find?created_at=#{item.created_at}"
+    expect(response).to be_success
+    raw_item = JSON.parse(response.body)
+    raw_item_created_at = Time.zone.parse(raw_item["created_at"]).to_s
+    expect(raw_item_created_at).to eq(item.created_at.to_s)
 
-    # check for case insensitivity on one attribute.
-    # if this fails, it signals that case insensitivity probably doesn't work
-    # on the other attributes either.
-    # no need to duplicate this for every attribute and slow down the tests.
-    #
-    # get "/api/v1/items/find?name=#{item.name.upcase}"
-    # expect(response).to be_success
-    # raw_item = JSON.parse(response.body)
-    # expect(raw_item["name"]).to eq(item.name)
+    get "/api/v1/items/find?updated_at=#{item.updated_at}"
+    expect(response).to be_success
+    raw_item = JSON.parse(response.body)
+    raw_item_updated_at = Time.zone.parse(raw_item["updated_at"]).to_s
+    expect(raw_item_updated_at).to eq(item.updated_at.to_s)
+  end
+
+  it "sends an item using a case-insensitive query" do
+    item = create(:item)
+
+    get "/api/v1/items/find?name=#{item.name.upcase}"
+    expect(response).to be_success
+    raw_item = JSON.parse(response.body)
+    expect(raw_item["name"]).to eq(item.name)
+
+    get "/api/v1/items/find?description=#{item.description.upcase}"
+    expect(response).to be_success
+    raw_item = JSON.parse(response.body)
+    expect(raw_item["description"]).to eq(item.description)
   end
 
   it "sends all items with a certain attribute value" do
