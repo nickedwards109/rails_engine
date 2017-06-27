@@ -2,7 +2,11 @@ require 'rails_helper'
 
 RSpec.describe InvoiceItem, type: :model do
   it "belongs to an item and an invoice" do
-    item = Item.create(name: "Item Name", description: "Item Description")
+    merchant = Merchant.create(name: "MerchantName")
+    item = Item.create(
+                       name: "Item Name",
+                       description: "Item Description",
+                       merchant_id: merchant.id)
     invoice = Invoice.create(status: "shipped")
     invoice_item = InvoiceItem.create(
                                       item_id: item.id,
