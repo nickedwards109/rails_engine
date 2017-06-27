@@ -21,6 +21,14 @@ namespace :csv do
                        # merchant_id: row["merchant_id"],
                        ])
     end
+    CSV.foreach("data/invoice_items.csv", headers: true, encoding: "ISO-8859-1:UTF-8") do |row|
+      InvoiceItem.create!([
+                       item_id: row["item_id"],
+                       invoice_id: row["invoice_id"],
+                       quantity: row["quantity"],
+                       unit_price: row["unit_price"]
+                       ])
+    end
     CSV.foreach("data/merchants.csv", headers: true, encoding: "ISO-8859-1:UTF-8") do |row|
       Merchant.create!([
                         name: row["name"],
