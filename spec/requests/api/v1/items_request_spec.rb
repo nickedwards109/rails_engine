@@ -53,16 +53,17 @@ describe "Items API" do
     raw_item = JSON.parse(response.body)
     expect(raw_item["unit_price"]).to eq(item.unit_price)
 
-  # commented out tests are not passing yet
-    # get "/api/v1/items/find?created_at=#{item.created_at}"
-    # expect(response).to be_success
-    # raw_item = JSON.parse(response.body)
-    # expect(raw_item["created_at"]).to eq(item.created_at)
-    #
-    # get "/api/v1/items/find?updated_at=#{item.updated_at}"
-    # expect(response).to be_success
-    # raw_item = JSON.parse(response.body)
-    # expect(raw_item["updated_at"]).to eq(item.updated_at)
+    get "/api/v1/items/find?created_at=#{item.created_at}"
+    expect(response).to be_success
+    raw_item = JSON.parse(response.body)
+    raw_item_created_at = Time.zone.parse(raw_item["created_at"]).to_s
+    expect(raw_item_created_at).to eq(item.created_at.to_s)
+
+    get "/api/v1/items/find?updated_at=#{item.updated_at}"
+    expect(response).to be_success
+    raw_item = JSON.parse(response.body)
+    raw_item_updated_at = Time.zone.parse(raw_item["updated_at"]).to_s
+    expect(raw_item_updated_at).to eq(item.updated_at.to_s)
 
     # check for case insensitivity on one attribute.
     # if this fails, it signals that case insensitivity probably doesn't work
