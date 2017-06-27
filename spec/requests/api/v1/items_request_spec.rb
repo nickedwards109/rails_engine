@@ -75,6 +75,19 @@ describe "Items API" do
     # expect(raw_item["name"]).to eq(item.name)
   end
 
+  it "sends all items with a certain attribute value" do
+    item1 = create(:item, name: "ItemName")
+    item2 = create(:item, name: "ItemName")
+
+    get 'api/v1/items/find_all?name=ItemName'
+    expect(response).to be_success
+
+    items = JSON.parse(response.body)
+    expect(items.count).to eq(2)
+    expect(items.first.name).to eq("ItemName")
+    expect(items.last.name).to eq("ItemName")
+  end
+
   it "sends a random item" do
     item = create(:item)
 
