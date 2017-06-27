@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :item do
-    name "ItemName"
-    description "ItemDescription"
+    name "Item Name"
+    description "Item Description"
     unit_price "22.50"
   end
 end
