@@ -8,6 +8,8 @@ Rails.application.routes.draw do
         get ':id', to: "items#show"
         get '/', to: "items#index"
       end
+
+      resources :merchants, only: [:show, :index]
     end
   end
 end
