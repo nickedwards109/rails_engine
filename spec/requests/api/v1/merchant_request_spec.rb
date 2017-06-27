@@ -60,4 +60,20 @@ describe "Merchants API " do
     expect(merchant["updated_at"]).to eq(updated)
   end
 
+  it "can find a merchant's associated items" do
+    merchant = Merchant.create(name: "MerchantName")
+    item1 = create(:item, merchant_id: merchant.id)
+    item2 = create(:item, merchant_id: merchant.id)
+
+    get "/api/v1/merchants/#{merchant.id}/items"
+    expect(response).to be_success
+
+    raw_items = JSON.parse(response.body)
+    expect(raw_items.count).to eq(2)
+    expect([item1.id, item2.id]).to include(raw_items.first["id"])
+    expect([item1.id, item2.id]).to include(raw_items.last["id"])
+    expect(raw_items.first[:name]).to be_nil
+    expect(raw_items.first[:description]).to be_nil
+    expect(raw_items.first[:unit_price]).to be_nil
+  end
 end
