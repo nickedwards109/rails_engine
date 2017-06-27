@@ -14,6 +14,7 @@ describe "Merchants API " do
 
     merchant = merchants.first
     expect(merchant).to have_key("name")
+
   end
 
   it "can get one merchant by its id" do
