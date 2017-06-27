@@ -6,6 +6,7 @@ RSpec.describe InvoiceItem, type: :model do
     item = Item.create(
                        name: "Item Name",
                        description: "Item Description",
+                       unit_price: "25.00",
                        merchant_id: merchant.id)
     invoice = Invoice.create(status: "shipped")
     invoice_item = InvoiceItem.create(

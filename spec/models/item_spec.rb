@@ -6,6 +6,7 @@ RSpec.describe Item, type: :model do
     item = Item.create(
                        name: "Item Name",
                        description: "Item Description",
+                       unit_price: "25.00",
                        merchant_id: merchant.id)
     expect(item).to be_valid
     expect(item).to respond_to(:name)
