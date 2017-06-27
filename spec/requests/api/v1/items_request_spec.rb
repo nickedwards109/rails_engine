@@ -74,4 +74,13 @@ describe "Items API" do
     # raw_item = JSON.parse(response.body)
     # expect(raw_item["name"]).to eq(item.name)
   end
+
+  it "sends a random item" do
+    item = create(:item)
+
+    get '/api/v1/items/random.json'
+    expect(response).to be_success
+    raw_item = JSON.parse(response.body)
+    expect(raw_item["name"]).to eq(item.name)
+  end
 end
