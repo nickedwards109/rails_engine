@@ -29,4 +29,10 @@ ActiveRecord::Schema.define(version: 20170627175951) do
     t.string "unit_price"
   end
 
+  create_table "merchants", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
 end
