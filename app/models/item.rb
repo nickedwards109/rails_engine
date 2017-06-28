@@ -1,6 +1,8 @@
 class Item < ApplicationRecord
   belongs_to :merchant
-  
+  has_many :invoice_items
+  has_many :invoices, through: :invoice_items
+
   def self.find_case_insensitive(item_params)
     if item_params[:name]
       Item.find_by("name ILIKE ?", item_params[:name])
