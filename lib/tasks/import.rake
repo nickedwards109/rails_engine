@@ -33,9 +33,7 @@ namespace :csv do
       Invoice.create!([
                         merchant_id: row["merchant_id"],
                         customer_id: row["customer_id"],
-                        status: row["shipped"],
-                        customer_id: row["customer_id"],
-                        merchant_id: row["merchant_id"],
+                        status: row["shipped"]
                        ])
     end
 
