@@ -57,9 +57,8 @@ describe "Transactions API " do
     get "/api/v1/transactions/#{transaction.id}/invoice.json"
     expect(response).to be_success
 
-    raw_items = JSON.parse(response.body)
-    expect(raw_items.count).to eq(1)
-    expect(raw_items.first["id"]).to eq(invoice.id)
-    expect(raw_items.first["status"]).to be_nil
+    raw_invoice = JSON.parse(response.body)
+    expect(raw_invoice["id"]).to eq(invoice.id)
+    expect(raw_invoice["status"]).to be_nil
   end
 end
