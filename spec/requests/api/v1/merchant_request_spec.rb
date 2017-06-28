@@ -82,7 +82,5 @@ describe "Merchants API " do
     expect(raw_items.count).to eq(2)
     expect([item1.id, item2.id]).to include(raw_items.first["id"])
     expect([item1.id, item2.id]).to include(raw_items.last["id"])
-    expect(raw_items.first["description"]).to be_nil
-    expect(raw_items.first["unit_price"]).to be_nil
   end
 end

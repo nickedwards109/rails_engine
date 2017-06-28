@@ -59,6 +59,5 @@ describe "Transactions API " do
 
     raw_invoice = JSON.parse(response.body)
     expect(raw_invoice["id"]).to eq(invoice.id)
-    expect(raw_invoice["status"]).to be_nil
   end
 end
