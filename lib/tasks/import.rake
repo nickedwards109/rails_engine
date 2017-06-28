@@ -7,8 +7,7 @@ namespace :csv do
                     name: row["name"],
                     description: row["description"],
                     unit_price: row["unit_price"],
-                    # not importing the merchant_id until we set up that relationship
-                    # merchant_id: row["merchant_id"],
+                    merchant_id: row["merchant_id"],
                     created_at: row["created_at"],
                     updated_at: row["updated_at"]
                     ])
