@@ -88,4 +88,20 @@ describe "Customers API " do
     expect([invoice1.id, invoice2.id]).to include(raw_invoices.first["id"])
     expect([invoice1.id, invoice2.id]).to include(raw_invoices.last["id"])
   end
+
+  it "can find a customer's associated transactions" do
+    customer = create(:customer)
+    merchant = create(:merchant)
+    invoice = create(:invoice, merchant_id: merchant.id, customer_id: customer.id)
+    transaction1 = create(:transaction, invoice_id: invoice.id)
+    transaction2 = create(:transaction, invoice_id: invoice.id)
+
+    get "/api/v1/customers/#{customer.id}/transactions.json"
+    expect(response).to be_success
+
+    raw_transactions = JSON.parse(response.body)
+    expect(raw_transactions.count).to eq(2)
+    expect([transaction1.id, transaction2.id]).to include(raw_transactions.first["id"])
+    expect([transaction1.id, transaction2.id]).to include(raw_transactions.last["id"])
+  end
 end
