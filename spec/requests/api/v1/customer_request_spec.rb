@@ -24,7 +24,7 @@ describe "Customers API " do
     expect(customer["id"]).to eq(id)
   end
 
-  xit "can find a customer by first name" do
+  it "can find a customer by first name" do
     first_name = create(:customer).first_name
 
     get "/api/v1/customers/find?first_name=#{first_name}"
@@ -35,7 +35,7 @@ describe "Customers API " do
     expect(customer["first_name"]).to eq(first_name)
   end
 
-  xit "can find a customer by last name" do
+  it "can find a customer by last name" do
     last_name = create(:customer).last_name
 
     get "/api/v1/customers/find?last_name=#{last_name}"
@@ -56,7 +56,7 @@ describe "Customers API " do
     expect(customer["first_name"]).to eq(created.first_name)
   end
 
-  xit "can find a customer by updated date" do
+  it "can find a customer by updated date" do
     updated = create(:customer, updated_at: "2012-03-17T03:04:05.000Z")
     get "/api/v1/customers/find?updated_at=#{updated.updated_at}"
 
@@ -64,5 +64,13 @@ describe "Customers API " do
 
     expect(response).to be_success
     expect(customer["first_name"]).to eq(updated.first_name)
+  end
+
+  it "can find a random customer" do
+    create_list(:customer, 10)
+
+    get "/api/v1/customers/random"
+
+    expect(response).to be_success
   end
 end

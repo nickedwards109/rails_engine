@@ -26,7 +26,7 @@ describe "Transactions API " do
     expect(transaction["id"]).to eq(id)
   end
 
-  xit "can find a transaction by credit card number" do
+  it "can find a transaction by credit card number" do
     invoice = create(:invoice)
     card_number = create(:transaction, invoice: invoice).credit_card_number
 
@@ -36,5 +36,17 @@ describe "Transactions API " do
 
     expect(response).to be_success
     expect(transaction["credit_card_number"]).to eq(card_number)
+  end
+
+  it "can find a random transaction" do
+    invoice = create(:invoice)
+    create_list(:transaction, 10, invoice: invoice)
+
+    get "/api/v1/transactions/random"
+
+    JSON.parse(response.body)
+
+    expect(response).to be_success
+
   end
 end
