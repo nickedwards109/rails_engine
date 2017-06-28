@@ -33,9 +33,10 @@ namespace :csv do
       Invoice.create!([
                         merchant_id: row["merchant_id"],
                         customer_id: row["customer_id"],
-                        created_at: row["created_at"],
-                        updated_at: row["updated_at"]
-                      ])
+                        status: row["shipped"],
+                        customer_id: row["customer_id"],
+                        merchant_id: row["merchant_id"],
+                       ])
     end
 
 		CSV.foreach('data/transactions.csv', headers: true, encoding: "ISO-8859-1:UTF-8") do |row|
