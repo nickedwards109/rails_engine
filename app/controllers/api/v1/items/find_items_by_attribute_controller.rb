@@ -1,4 +1,4 @@
-class Api::V1::Items::FindItemByAttributeController < ApplicationController
+class Api::V1::Items::FindItemsByAttributeController < ApplicationController
   def show
     render json: Item.find_case_insensitive(item_params)
   end
