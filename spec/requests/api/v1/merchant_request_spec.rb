@@ -39,9 +39,9 @@ describe "Merchants API " do
     expect(merchant["name"]).to eq(name)
   end
 
-# not yet passing
+
   xit "can find a merchant by created date" do
-    created = create(:merchant).formatted_create
+    created = create(:merchant).created_at
     get "/api/v1/merchants/find?created_at=#{created}"
 
     merchant = JSON.parse(response.body)
@@ -51,13 +51,23 @@ describe "Merchants API " do
   end
 
   xit "can find a merchant by updated date" do
-    updated = create(:merchant).formatted_update
+    updated = create(:merchant).updated_at
     get "/api/v1/merchants/find?updated_at=#{updated}"
 
     merchant = JSON.parse(response.body)
 
     expect(response).to be_success
     expect(merchant["updated_at"]).to eq(updated)
+  end
+
+  it "can find a random merchant" do
+    merchants = create_list(:merchant, 3)
+
+    get "/api/v1/merchants/random"
+
+    JSON.parse(response.body)
+
+    expect(response).to be_success
   end
 
   it "can find a merchant's associated items" do
@@ -74,3 +84,4 @@ describe "Merchants API " do
     expect([item1.id, item2.id]).to include(raw_items.last["id"])
   end
 end
+
