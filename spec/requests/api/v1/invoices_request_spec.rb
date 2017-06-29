@@ -38,18 +38,6 @@ describe "Invoices API" do
     expect(response).to be_success
     raw_invoice = JSON.parse(response.body)
     expect(raw_invoice["status"]).to eq(invoice.status)
-
-    get "/api/v1/invoices/find?created_at=#{invoice.created_at}"
-    expect(response).to be_success
-    raw_invoice = JSON.parse(response.body)
-    raw_invoice_created_at = Time.zone.parse(raw_invoice["created_at"]).to_s
-    expect(raw_invoice_created_at).to eq(invoice.created_at.to_s)
-
-    get "/api/v1/invoices/find?updated_at=#{invoice.updated_at}"
-    expect(response).to be_success
-    raw_invoice = JSON.parse(response.body)
-    raw_invoice_updated_at = Time.zone.parse(raw_invoice["updated_at"]).to_s
-    expect(raw_invoice_updated_at).to eq(invoice.updated_at.to_s)
   end
 
   it "sends an invoice using a case-insensitive query" do

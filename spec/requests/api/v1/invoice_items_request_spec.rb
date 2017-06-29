@@ -42,18 +42,6 @@ describe "Invoice_items API" do
     expect(response).to be_success
     raw_invoice_item = JSON.parse(response.body)
     expect(raw_invoice_item["item_id"]).to eq(invoice_item.item_id)
-
-    get "/api/v1/invoice_items/find?created_at=#{invoice_item.created_at}"
-    expect(response).to be_success
-    raw_invoice_item = JSON.parse(response.body)
-    raw_invoice_item_created_at = Time.zone.parse(raw_invoice_item["created_at"]).to_s
-    expect(raw_invoice_item_created_at).to eq(invoice_item.created_at.to_s)
-
-    get "/api/v1/invoice_items/find?updated_at=#{invoice_item.updated_at}"
-    expect(response).to be_success
-    raw_invoice_item = JSON.parse(response.body)
-    raw_invoice_item_updated_at = Time.zone.parse(raw_invoice_item["updated_at"]).to_s
-    expect(raw_invoice_item_updated_at).to eq(invoice_item.updated_at.to_s)
   end
 
   it "sends all invoice_items with a certain attribute value" do
