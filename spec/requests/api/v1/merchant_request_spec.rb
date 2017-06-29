@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe "Merchants API " do
-  it "sends a list of merchants" do
+  xit "sends a list of merchants" do
     create_list(:merchant, 3)
 
     get "/api/v1/merchants"
@@ -17,7 +17,7 @@ describe "Merchants API " do
 
   end
 
-  it "can get one merchant by its id" do
+  xit "can get one merchant by its id" do
     id = create(:merchant).id
 
     get "/api/v1/merchants/#{id}"
@@ -28,7 +28,7 @@ describe "Merchants API " do
     expect(merchant["id"]).to eq(id)
   end
 
-  it "can find a merchant by name" do
+  xit "can find a merchant by name" do
     name = create(:merchant).name
 
     get "/api/v1/merchants/find?name=#{name}"
@@ -60,7 +60,7 @@ describe "Merchants API " do
     expect(merchant["updated_at"]).to eq(updated)
   end
 
-  it "can find a random merchant" do
+  xit "can find a random merchant" do
     merchants = create_list(:merchant, 3)
 
     get "/api/v1/merchants/random"
@@ -70,7 +70,7 @@ describe "Merchants API " do
     expect(response).to be_success
   end
 
-  it "can find a merchant's associated items" do
+  xit "can find a merchant's associated items" do
     merchant = Merchant.create(name: "MerchantName")
     item1 = create(:item, merchant_id: merchant.id)
     item2 = create(:item, merchant_id: merchant.id)
@@ -84,7 +84,7 @@ describe "Merchants API " do
     expect([item1.id, item2.id]).to include(raw_items.last["id"])
   end
 
-  it "can find a merchant's associated invoices" do
+  xit "can find a merchant's associated invoices" do
     customer = create(:customer)
     merchant = create(:merchant)
     invoice1 = create(:invoice, merchant_id: merchant.id, customer_id: customer.id)
@@ -99,7 +99,7 @@ describe "Merchants API " do
     expect([invoice1.id, invoice2.id]).to include(raw_invoices.last["id"])
   end
 
-  it "can find a merchant's customer who has created the most successful transactions" do
+  xit "can find a merchant's customer who has created the most successful transactions" do
     good_customer = create(:customer)
     bad_customer = create(:customer)
     merchant = create(:merchant)
@@ -126,7 +126,7 @@ describe "Merchants API " do
     expect(raw_customer["first_name"]).to eq(good_customer.first_name)
   end
 
-  it "can find a merchant's total revenue across all successful transactions" do
+  xit "can find a merchant's total revenue across all successful transactions" do
     merchant = create(:merchant)
     success_invoice = create(:invoice, merchant_id: merchant.id)
     success_invoice_item1 = create(:invoice_item, unit_price: "2250",
@@ -153,22 +153,18 @@ describe "Merchants API " do
     merchant = create(:merchant)
     date1 = "2012-03-16 11:55:05"
     date2 = "2012-03-17 11:55:05"
-    invoice_date1 = create(:invoice, merchant_id: merchant.id)
-    invoice_item_date1 = create(:invoice_item, unit_price: "2250",
-                           invoice_id: invoice_date1.id, quantity: 1,
-                           created_at: date1)
-    invoice_item_date1 = create(:invoice_item, unit_price: "2250",
-                           invoice_id: invoice_date1.id, quantity: 2,
-                           created_at: date1)
+    invoice_date1 = create(:invoice, merchant_id: merchant.id, created_at: date1)
+    invoice_item1_date1 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice_date1.id, quantity: 1)
+    invoice_item2_date1 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice_date1.id, quantity: 2)
     transaction_date1 = create(:transaction, invoice_id: invoice_date1.id)
 
-    invoice_date2 = create(:invoice, merchant_id: merchant.id)
-    invoice_item_date2 = create(:invoice_item, unit_price: "2250",
-                           invoice_id: invoice_date2.id, quantity: 1,
-                           created_at: date2)
-    invoice_item_date2 = create(:invoice_item, unit_price: "2250",
-                           invoice_id: invoice_date2.id, quantity: 1,
-                           created_at: date2)
+    invoice_date2 = create(:invoice, merchant_id: merchant.id, created_at: date2)
+    invoice_item1_date2 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice_date2.id, quantity: 1)
+    invoice_item2_date2 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice_date2.id, quantity: 1)
     transaction_date2 = create(:transaction, invoice_id: invoice_date2.id)
 
     get "/api/v1/merchants/#{merchant.id}/revenue?date=#{date1}"
