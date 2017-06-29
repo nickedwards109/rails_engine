@@ -125,4 +125,30 @@ describe "Merchants API " do
     expect(raw_customer["id"]).to eq(good_customer.id)
     expect(raw_customer["first_name"]).to eq(good_customer.first_name)
   end
+
+  it "can find a merchant's total revenue across all successful transactions" do
+    merchant = create(:merchant)
+    item = create(:item, merchant_id: merchant.id, unit_price: "22.50")
+    # ??? add merchant_id to invoice?
+    # I don't think this is necessary since the merchant is linked through the items
+    success_invoice = create(:invoice)
+    success_invoice_item1 = create(:invoice_item, item_id: item.id,
+                            invoice_id: success_invoice.id, quantity: 1)
+    success_invoice_item2 = create(:invoice_item, item_id: item.id,
+                            invoice_id: success_invoice.id, quantity: 2)
+    success_transaction_1 = create(:transaction, invoice_id: success_invoice.id,
+                            result: "success")
+
+    failed_invoice = create(:invoice)
+    failed_invoice_item1 = create(:invoice_item, item_id: item.id,
+                           invoice_id: failed_invoice.id, quantity: 1)
+    failed_transaction_1 = create(:transaction, invoice_id: failed_invoice.id,
+                           result: "failed")
+
+    get "/api/v1/merchants/#{merchant.id}/revenue"
+    expect(response).to be_success
+
+    raw_revenue = JSON.parse(response.body)
+    expect(raw_revenue["revenue"]).to eq("67.50")
+  end
 end
