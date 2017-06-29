@@ -5,6 +5,7 @@ Rails.application.routes.draw do
         get '/find', to: "find_items_by_attribute#show"
         get '/find_all', to: "find_items_by_attribute#index"
         get '/random', to: "random_items#show"
+        get '/most_items', to: "most_items#index"
         get '/:id', to: "items#show"
         get '/', to: "items#index"
         get '/:id/merchant', to: "item_merchants#index"

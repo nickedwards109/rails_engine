@@ -22,4 +22,11 @@ class Item < ApplicationRecord
       Item.where(item_params)
     end
   end
+
+  def self.most_items(quantity)
+    joins(invoices: :transactions)
+    .where(transactions: {result: "success"})
+    .group(:id)
+    .order("sum(quantity) DESC").limit(quantity)
+  end
 end
