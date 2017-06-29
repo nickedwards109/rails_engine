@@ -22,4 +22,26 @@ class Item < ApplicationRecord
       Item.where(item_params)
     end
   end
+
+  def self.most_items(quantity)
+    joins(invoices: :transactions)
+    .where(transactions: {result: "success"})
+    .group(:id)
+    .order("sum(quantity) DESC").limit(quantity)
+  end
+
+  def self.most_revenue(quantity)
+    joins(invoices: [:transactions])
+    .where(transactions: {result: "success"})
+    .group(:id).order("sum(invoice_items.quantity * cast(invoice_items.unit_price as integer)) DESC")
+    .limit(quantity)
+  end
+
+  def best_day
+    invoices.joins(:invoice_items)
+    .group('invoices.id, invoices.created_at')
+    .order('sum(invoice_items.quantity) DESC')
+    .first
+    .created_at
+  end
 end
