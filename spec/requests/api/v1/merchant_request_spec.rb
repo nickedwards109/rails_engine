@@ -128,8 +128,6 @@ describe "Merchants API " do
 
   it "can find a merchant's total revenue across all successful transactions" do
     merchant = create(:merchant)
-    # ??? add merchant_id to invoice?
-    # I don't think this is necessary since the merchant is linked through the items
     success_invoice = create(:invoice, merchant_id: merchant.id)
     success_invoice_item1 = create(:invoice_item, unit_price: "2250",
                             invoice_id: success_invoice.id, quantity: 1)
@@ -145,6 +143,35 @@ describe "Merchants API " do
                            result: "failed")
 
     get "/api/v1/merchants/#{merchant.id}/revenue"
+    expect(response).to be_success
+
+    raw_revenue = JSON.parse(response.body)
+    expect(raw_revenue["revenue"]).to eq("6750.00")
+  end
+
+  it "can find a merchant's total revenue across all successful transactions, scoped to a date" do
+    merchant = create(:merchant)
+    date1 = "2012-03-16 11:55:05"
+    date2 = "2012-03-17 11:55:05"
+    invoice_date1 = create(:invoice, merchant_id: merchant.id)
+    invoice_item_date1 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice_date1.id, quantity: 1,
+                           created_at: date1)
+    invoice_item_date1 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice_date1.id, quantity: 2,
+                           created_at: date1)
+    transaction_date1 = create(:transaction, invoice_id: invoice_date1.id)
+
+    invoice_date2 = create(:invoice, merchant_id: merchant.id)
+    invoice_item_date2 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice_date2.id, quantity: 1,
+                           created_at: date2)
+    invoice_item_date2 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice_date2.id, quantity: 1,
+                           created_at: date2)
+    transaction_date2 = create(:transaction, invoice_id: invoice_date2.id)
+
+    get "/api/v1/merchants/#{merchant.id}/revenue?date=#{date1}"
     expect(response).to be_success
 
     raw_revenue = JSON.parse(response.body)
