@@ -83,5 +83,19 @@ describe "Merchants API " do
     expect([item1.id, item2.id]).to include(raw_items.first["id"])
     expect([item1.id, item2.id]).to include(raw_items.last["id"])
   end
-end
 
+  it "can find a merchant's associated invoices" do
+    customer = create(:customer)
+    merchant = create(:merchant)
+    invoice1 = create(:invoice, merchant_id: merchant.id, customer_id: customer.id)
+    invoice2 = create(:invoice, merchant_id: merchant.id, customer_id: customer.id)
+
+    get "/api/v1/merchants/#{merchant.id}/invoices.json"
+    expect(response).to be_success
+
+    raw_invoices = JSON.parse(response.body)
+    expect(raw_invoices.count).to eq(2)
+    expect([invoice1.id, invoice2.id]).to include(raw_invoices.first["id"])
+    expect([invoice1.id, invoice2.id]).to include(raw_invoices.last["id"])
+  end
+end

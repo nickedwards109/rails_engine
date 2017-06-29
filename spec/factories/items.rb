@@ -3,6 +3,6 @@ FactoryGirl.define do
     merchant
     name "Item Name"
     description "Item Description"
-    unit_price "22.50"
+    unit_price "2250"
   end
 end

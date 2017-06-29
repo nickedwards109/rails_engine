@@ -18,7 +18,7 @@ describe "Items API" do
   end
 
   it "sends a single item" do
-    item = create(:item)
+    item = create(:item, unit_price: "22.50")
     id = item.id
 
     get "/api/v1/items/#{id}.json"
@@ -27,11 +27,11 @@ describe "Items API" do
     raw_item = JSON.parse(response.body)
     expect(raw_item["name"]).to eq(item.name)
     expect(raw_item["description"]).to eq(item.description)
-    expect(raw_item["unit_price"]).to eq(item.unit_price)
+    expect(raw_item["unit_price"]).to eq("22.50")
   end
 
   it "sends an item selected by id, name, description, unit_price, created_at, or updated_at" do
-    item = create(:item)
+    item = create(:item, unit_price: "22.50")
 
     get "/api/v1/items/find?id=#{item.id}"
     expect(response).to be_success
@@ -51,19 +51,7 @@ describe "Items API" do
     get "/api/v1/items/find?unit_price=#{item.unit_price}"
     expect(response).to be_success
     raw_item = JSON.parse(response.body)
-    expect(raw_item["unit_price"]).to eq(item.unit_price)
-
-    get "/api/v1/items/find?created_at=#{item.created_at}"
-    expect(response).to be_success
-    raw_item = JSON.parse(response.body)
-    raw_item_created_at = Time.zone.parse(raw_item["created_at"]).to_s
-    expect(raw_item_created_at).to eq(item.created_at.to_s)
-
-    get "/api/v1/items/find?updated_at=#{item.updated_at}"
-    expect(response).to be_success
-    raw_item = JSON.parse(response.body)
-    raw_item_updated_at = Time.zone.parse(raw_item["updated_at"]).to_s
-    expect(raw_item_updated_at).to eq(item.updated_at.to_s)
+    expect(raw_item["unit_price"]).to eq("22.50")
   end
 
   it "sends an item using a case-insensitive query" do
