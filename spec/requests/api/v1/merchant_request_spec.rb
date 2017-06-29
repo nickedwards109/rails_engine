@@ -98,4 +98,27 @@ describe "Merchants API " do
     expect([invoice1.id, invoice2.id]).to include(raw_invoices.first["id"])
     expect([invoice1.id, invoice2.id]).to include(raw_invoices.last["id"])
   end
+
+  it "can find a merchant's customer who has created the most successful transactions" do
+    good_customer = create(:customer)
+    bad_customer = create(:customer)
+    merchant = create(:merchant)
+
+    successful_transaction_1 = create(:transaction, result: "success")
+    successful_transaction_2 = create(:transaction, result: "success")
+    successful_transaction_3 = create(:transaction, result: "success")
+    unsuccessful_transaction = create(:transaction, result: "success")
+
+    successful_transaction_1.customer = good_customer
+    successful_transaction_2.customer = good_customer
+    successful_transaction_3.customer = bad_customer
+    unsuccessful_transaction.customer = bad_customer
+
+    get '/api/v1/merchants/#{merchant.id}/favorite_customer'
+    expect(response).to be_success
+
+    raw_customer = JSON.parse(response.body)
+    expect(raw_customer["id"]).to eq(good_customer.id)
+    expect(raw_customer["first_name"]).to eq(good_customer.first_name)
+  end
 end
