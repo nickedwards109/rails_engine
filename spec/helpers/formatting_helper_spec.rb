@@ -1,5 +1,4 @@
 require 'rails_helper'
-include FormattingHelper
 
 RSpec.describe FormattingHelper do
   it "formats an integer or float into a currency format" do
