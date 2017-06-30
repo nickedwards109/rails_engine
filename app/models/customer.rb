@@ -35,7 +35,8 @@ class Customer < ApplicationRecord
     WHERE transactions.result = 'success'
     AND merchants.id = #{merchant_id}
     ;")
-
+  end
+  
   def favorite_merchant
     merchants.joins(:transactions)
     .where(transactions: {result: "success"})
