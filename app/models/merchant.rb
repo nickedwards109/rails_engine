@@ -6,6 +6,7 @@ class Merchant < ApplicationRecord
   has_many :invoice_items, through: :invoices
   has_many :customers, through: :invoices
 
+
   def total_revenue(date=nil)
     if date
       total_revenue_scoped_to(date)
