@@ -32,7 +32,7 @@ The following endpoints are available:
 * GET '/api/v1/customers/'
 * GET '/api/v1/customers/find?parameter=x'
 * GET '/api/v1/customers/find_all?parameter=x'
-Customer parameters are id, first_name, last_name, created_at, and updated_at.
+  * Customer parameters are id, first_name, last_name, created_at, and updated_at.
 
 * GET '/api/v1/invoices/random'
 * GET '/api/v1/invoices/:id/customer'
@@ -44,7 +44,7 @@ Customer parameters are id, first_name, last_name, created_at, and updated_at.
 * GET '/api/v1/invoices/'
 * GET '/api/v1/invoices/find?parameter=x'
 * GET '/api/v1/invoices/find_all?parameter=x'
-Invoice parameters are id, status, customer_id, merchant_id, created_at, and updated_at.
+  * Invoice parameters are id, status, customer_id, merchant_id, created_at, and updated_at.
 
 * GET '/api/v1/items/most_items?quantity=x'
 * GET '/api/v1/items/most_revenue?quantity=x'
@@ -56,7 +56,7 @@ Invoice parameters are id, status, customer_id, merchant_id, created_at, and upd
 * GET '/api/v1/items/'
 * GET '/api/v1/items/find?parameter=x'
 * GET '/api/v1/items/find_all?parameter=x'
-Item parameters are id, name, description, unit_price, created_at, updated_at, and merchant_id.
+  * Item parameters are id, name, description, unit_price, created_at, updated_at, and merchant_id.
 
 * GET '/api/v1/invoice_items/random'
 * GET '/api/v1/invoice_items/:id/invoice'
@@ -65,7 +65,7 @@ Item parameters are id, name, description, unit_price, created_at, updated_at, a
 * GET '/api/v1/invoice_items/'
 * GET '/api/v1/invoice_items/find?parameter=x'
 * GET '/api/v1/invoice_items/find_all?parameter=x'
-Invoice_Item parameters are id, item_id, invoice_id, quantity, unit_price, created_at, and updated_at.
+  * Invoice_Item parameters are id, item_id, invoice_id, quantity, unit_price, created_at, and updated_at.
 
 * GET '/api/v1/merchants/most_items?quantity=x'
 * GET '/api/v1/merchants/most_revenue?quantity=x'
@@ -80,7 +80,7 @@ Invoice_Item parameters are id, item_id, invoice_id, quantity, unit_price, creat
 * GET '/api/v1/merchants/'
 * GET '/api/v1/merchants/find?parameter=x'
 * GET '/api/v1/merchants/find_all?parameter=x'
-Merchant parameters are id, name, created_at, and updated_at.
+  * Merchant parameters are id, name, created_at, and updated_at.
 
 * GET '/api/v1/transactions/random'
 * GET '/api/v1/transactions/:id/invoice'
@@ -88,4 +88,4 @@ Merchant parameters are id, name, created_at, and updated_at.
 * GET '/api/v1/transactions/'
 * GET '/api/v1/transactions/find?parameter=x'
 * GET '/api/v1/transactions/find_all?parameter=x'
-Transaction parameters are id, invoice_id, credit_card_number, credit_card_expiration_date, result, created_at, and updated_at.
+  * Transaction parameters are id, invoice_id, credit_card_number, credit_card_expiration_date, result, created_at, and updated_at.
