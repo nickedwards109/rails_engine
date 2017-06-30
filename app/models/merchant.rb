@@ -54,7 +54,7 @@ class Merchant < ApplicationRecord
   def self.top_ranked_by_items_sold(quantity)
     top_merchants = Merchant.find_by_sql("
     SELECT merchants.*,
-    COUNT(invoice_items.quantity) AS quantity
+    SUM(invoice_items.quantity) AS quantity
     FROM merchants
     INNER JOIN invoices ON invoices.merchant_id = merchants.id
     INNER JOIN transactions ON transactions.invoice_id = invoices.id
