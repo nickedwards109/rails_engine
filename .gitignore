@@ -15,10 +15,6 @@
 
 .byebug_history
 
-# Ignore CSVs
-
-/data
-
 # Ignore simplecov
 
 coverage
