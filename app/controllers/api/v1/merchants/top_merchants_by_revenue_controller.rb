@@ -1,4 +1,4 @@
-class Api::V1::Merchants::TopMerchantsController < ApplicationController
+class Api::V1::Merchants::TopMerchantsByRevenueController < ApplicationController
 
   def index
     render json: Merchant.top_ranked_by_revenue(params[:quantity])
