@@ -269,25 +269,36 @@ describe "Merchants API " do
   end
 
   it "can find a merchant's customers who have not paid their invoices" do
-    good_customer = create(:customer)
-    bad_customer = create(:customer)
+    customer1 = create(:customer)
+    customer2 = create(:customer)
+    customer3 = create(:customer)
     merchant = create(:merchant)
 
-    paid_invoice = create(:invoice, merchant_id: merchant.id,
-                          customer_id: good_customer.id)
-    paid_transaction = create(:transaction, invoice_id: paid_invoice.id,
+    paid_invoice1 = create(:invoice, merchant_id: merchant.id,
+                          customer_id: customer1.id)
+    paid_transaction1 = create(:transaction, invoice_id: paid_invoice1.id,
                               result: "success")
+    unpaid_invoice1 = create(:invoice, merchant_id: merchant.id,
+                            customer_id: customer1.id)
+    unpaid_transaction1 = create(:transaction, invoice_id: unpaid_invoice1.id,
+                                result: "failed")
 
-    unpaid_invoice = create(:invoice, merchant_id: merchant.id,
-                            customer_id: bad_customer.id)
-    unpaid_transaction = create(:transaction, invoice_id: unpaid_invoice.id,
+    unpaid_invoice2 = create(:invoice, merchant_id: merchant.id,
+                            customer_id: customer2.id)
+    unpaid_transaction2 = create(:transaction, invoice_id: unpaid_invoice2.id,
+                                result: "failed")
+
+    unpaid_invoice3 = create(:invoice, merchant_id: merchant.id,
+                            customer_id: customer3.id)
+    unpaid_transaction3 = create(:transaction, invoice_id: unpaid_invoice3.id,
                                 result: "failed")
 
     get "/api/v1/merchants/#{merchant.id}/customers_with_pending_invoices"
     expect(response).to be_success
 
     raw_customers = JSON.parse(response.body)
-    expect(raw_customers.first["id"]).to eq(bad_customer.id)
-    expect(raw_customers.length).to eq(1)
+    expect([raw_customers.first["id"], raw_customers.last["id"]]).to include(customer2.id)
+    expect([raw_customers.first["id"], raw_customers.last["id"]]).to include(customer3.id)
+    expect(raw_customers.length).to eq(2)
   end
 end
