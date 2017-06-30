@@ -267,4 +267,27 @@ describe "Merchants API " do
     expect(raw_merchants.last["id"]).to eq(merchant2.id)
     expect(raw_merchants.length).to eq(2)
   end
+
+  it "can find a merchant's customers who have not paid their invoices" do
+    good_customer = create(:customer)
+    bad_customer = create(:customer)
+    merchant = create(:merchant)
+
+    paid_invoice = create(:invoice, merchant_id: merchant.id,
+                          customer_id: good_customer.id)
+    paid_transaction = create(:transaction, invoice_id: paid_invoice.id,
+                              result: "success")
+
+    unpaid_invoice = create(:invoice, merchant_id: merchant.id,
+                            customer_id: bad_customer.id)
+    unpaid_transaction = create(:transaction, invoice_id: unpaid_invoice.id,
+                                result: "failed")
+
+    get "/api/v1/merchants/#{merchant.id}/customers_with_pending_invoices"
+    expect(response).to be_success
+
+    raw_customers = JSON.parse(response.body)
+    expect(raw_customers.first["id"]).to eq(bad_customer.id)
+    expect(raw_customers.length).to eq(1)
+  end
 end
