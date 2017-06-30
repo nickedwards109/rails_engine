@@ -235,8 +235,8 @@ describe "Merchants API " do
     get '/api/v1/merchants/most_revenue?quantity=2'
     expect(response).to be_success
     raw_merchants = JSON.parse(response.body)
-    expect(raw_merchant.first["id"]).to eq(merchant1.id)
-    expect(raw_merchant.last["id"]).to eq(merchant2.id)
+    expect(raw_merchants.first["id"]).to eq(merchant1.id)
+    expect(raw_merchants.last["id"]).to eq(merchant2.id)
     expect(raw_merchants.length).to eq(2)
   end
 end

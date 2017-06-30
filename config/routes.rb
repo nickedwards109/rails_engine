@@ -44,6 +44,7 @@ Rails.application.routes.draw do
         get "/find", to: "find_merchants#show"
         get "/random", to: "random_merchants#show"
         get "/revenue", to: "merchant_revenues#index"
+        get "/most_revenue", to: "top_merchants#index"
         get "/:id/revenue", to: "merchant_revenues#show"
         get "/:id/items", to: "merchant_items#index"
         get "/:id/invoices", to: "merchant_invoices#index"

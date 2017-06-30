@@ -2,6 +2,8 @@ class Merchant < ApplicationRecord
   include FormattingHelper
   has_many :items
   has_many :invoices
+  has_many :transactions, through: :invoices
+  has_many :invoice_items, through: :invoices
 
   def total_revenue(date=nil)
     if date
@@ -32,5 +34,11 @@ class Merchant < ApplicationRecord
 
     formatted_revenue = format_to_currency(revenue)
     {revenue: formatted_revenue}
+  end
+
+  def self.top_ranked_by_revenue(quantity)
+
+    # top_merchants = joins(:invoices).joins(:transactions).merge(Transaction.successful).joins(:invoice_items).group(:id).order('SUM("CAST(invoice_items.unit_price AS float) * invoice_items.quantity") DESC').limit(quantity)
+    top_merchants = Merchant.find_by_sql("SELECT merchants.*, SUM(CAST(invoice_items.unit_price AS float) * invoice_items.quantity) as revenue FROM merchants INNER JOIN invoices ON invoices.merchant_id = merchants.id INNER JOIN transactions ON transactions.invoice_id = invoices.id INNER JOIN invoice_items ON invoice_items.invoice_id = invoices.id WHERE transactions.result = 'success' GROUP BY merchants.id ORDER BY revenue DESC LIMIT #{quantity} ;")
   end
 end
