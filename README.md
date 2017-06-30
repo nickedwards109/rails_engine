@@ -11,6 +11,7 @@ In order to run Rails Engine, starting by cloning the repository:
 
  * From your command line run *git clone https://github.com/nickedwards109/rails_engine.git*
  * cd into the *rails_engine* folder
+ * make a ./data folder and populate it with .csv files from https://github.com/turingschool-examples/sales_engine/tree/master/data
 
 Then run the following commands in succession:
  * *bundle*
@@ -20,7 +21,7 @@ Then run the following commands in succession:
 
 Note: It takes 3-5 minutes to import the dataset so please be patient!
 
-You can run the specs by running *rspec*.
+You can optionally run the specs by running *rspec*.
 
 The following endpoints are available:
 
