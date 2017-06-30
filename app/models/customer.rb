@@ -1,6 +1,7 @@
 class Customer < ApplicationRecord
   has_many :invoices
   has_many :transactions, through: :invoices
+  has_many :merchants, through: :invoices
 
   def self.favorite_customer(merchant_id)
     favorite_customer = Customer.find_by_sql("
@@ -34,5 +35,12 @@ class Customer < ApplicationRecord
     WHERE transactions.result = 'success'
     AND merchants.id = #{merchant_id}
     ;")
+
+  def favorite_merchant
+    merchants.joins(:transactions)
+    .where(transactions: {result: "success"})
+    .group(:id)
+    .order('count(transactions) DESC')
+    .first
   end
 end
