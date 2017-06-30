@@ -173,4 +173,132 @@ describe "Merchants API " do
     raw_revenue = JSON.parse(response.body)
     expect(raw_revenue["revenue"]).to eq("6750.00")
   end
+
+  it "can find all merchants' total revenue across all successful transactions, scoped to a date" do
+    merchant1 = create(:merchant)
+    merchant2 = create(:merchant)
+    date1 = "2012-03-16 11:55:05"
+    date2 = "2012-03-17 11:55:05"
+
+    invoice1_date1 = create(:invoice, merchant_id: merchant1.id, created_at: date1)
+    invoice1_item1_date1 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice1_date1.id, quantity: 1)
+    invoice1_item2_date1 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice1_date1.id, quantity: 2)
+    transaction1_date1 = create(:transaction, invoice_id: invoice1_date1.id)
+
+    invoice2_date1 = create(:invoice, merchant_id: merchant2.id, created_at: date1)
+    invoice2_item1_date1 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice2_date1.id, quantity: 1)
+    invoice2_item2_date1 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice2_date1.id, quantity: 2)
+    transaction2_date1 = create(:transaction, invoice_id: invoice2_date1.id)
+
+    invoice_date2 = create(:invoice, merchant_id: merchant1.id, created_at: date2)
+    invoice_item1_date2 = create(:invoice_item, unit_price: "3250",
+                           invoice_id: invoice_date2.id, quantity: 1)
+    invoice_item2_date2 = create(:invoice_item, unit_price: "3250",
+                           invoice_id: invoice_date2.id, quantity: 1)
+    transaction_date2 = create(:transaction, invoice_id: invoice_date2.id)
+
+    get "/api/v1/merchants/revenue?date=#{date1}"
+    expect(response).to be_success
+
+    raw_revenue = JSON.parse(response.body)
+    expect(raw_revenue["total_revenue"]).to eq("13500.00")
+  end
+
+  it "can find a variable number of top merchants ranked by revenue" do
+    merchant1 = create(:merchant)
+    merchant2 = create(:merchant)
+
+    invoice1 = create(:invoice, merchant_id: merchant1.id)
+    invoice1_item1 = create(:invoice_item, unit_price: "5250",
+                           invoice_id: invoice1.id, quantity: 1)
+    invoice1_item2 = create(:invoice_item, unit_price: "5250",
+                           invoice_id: invoice1.id, quantity: 2)
+    transaction1 = create(:transaction, invoice_id: invoice1.id)
+
+    invoice2 = create(:invoice, merchant_id: merchant2.id)
+    invoice2_item1 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice2.id, quantity: 1)
+    invoice2_item2 = create(:invoice_item, unit_price: "2250",
+                           invoice_id: invoice2.id, quantity: 2)
+    transaction2 = create(:transaction, invoice_id: invoice2.id)
+
+    get '/api/v1/merchants/most_revenue?quantity=1'
+    expect(response).to be_success
+    raw_merchants = JSON.parse(response.body)
+    expect(raw_merchants.first["id"]).to eq(merchant1.id)
+    expect(raw_merchants.length).to eq(1)
+
+    get '/api/v1/merchants/most_revenue?quantity=2'
+    expect(response).to be_success
+    raw_merchants = JSON.parse(response.body)
+    expect(raw_merchants.first["id"]).to eq(merchant1.id)
+    expect(raw_merchants.last["id"]).to eq(merchant2.id)
+    expect(raw_merchants.length).to eq(2)
+  end
+
+  it "can find a variable number of top merchants ranked by number of items sold" do
+    merchant1 = create(:merchant)
+    merchant2 = create(:merchant)
+
+    invoice1 = create(:invoice, merchant_id: merchant1.id)
+    invoice1_item1 = create(:invoice_item, invoice_id: invoice1.id, quantity: 5)
+    invoice1_item2 = create(:invoice_item, invoice_id: invoice1.id, quantity: 5)
+    transaction1 = create(:transaction, invoice_id: invoice1.id)
+
+    invoice2 = create(:invoice, merchant_id: merchant2.id)
+    invoice2_item1 = create(:invoice_item, invoice_id: invoice2.id, quantity: 1)
+    invoice2_item2 = create(:invoice_item, invoice_id: invoice2.id, quantity: 1)
+    transaction2 = create(:transaction, invoice_id: invoice2.id)
+
+    get '/api/v1/merchants/most_items?quantity=1'
+    expect(response).to be_success
+    raw_merchants = JSON.parse(response.body)
+    expect(raw_merchants.first["id"]).to eq(merchant1.id)
+    expect(raw_merchants.length).to eq(1)
+
+    get '/api/v1/merchants/most_items?quantity=2'
+    expect(response).to be_success
+    raw_merchants = JSON.parse(response.body)
+    expect(raw_merchants.first["id"]).to eq(merchant1.id)
+    expect(raw_merchants.last["id"]).to eq(merchant2.id)
+    expect(raw_merchants.length).to eq(2)
+  end
+
+  it "can find a merchant's customers who have not paid their invoices" do
+    customer1 = create(:customer)
+    customer2 = create(:customer)
+    customer3 = create(:customer)
+    merchant = create(:merchant)
+
+    paid_invoice1 = create(:invoice, merchant_id: merchant.id,
+                          customer_id: customer1.id)
+    paid_transaction1 = create(:transaction, invoice_id: paid_invoice1.id,
+                              result: "success")
+    unpaid_invoice1 = create(:invoice, merchant_id: merchant.id,
+                            customer_id: customer1.id)
+    unpaid_transaction1 = create(:transaction, invoice_id: unpaid_invoice1.id,
+                                result: "failed")
+
+    unpaid_invoice2 = create(:invoice, merchant_id: merchant.id,
+                            customer_id: customer2.id)
+    unpaid_transaction2 = create(:transaction, invoice_id: unpaid_invoice2.id,
+                                result: "failed")
+
+    unpaid_invoice3 = create(:invoice, merchant_id: merchant.id,
+                            customer_id: customer3.id)
+    unpaid_transaction3 = create(:transaction, invoice_id: unpaid_invoice3.id,
+                                result: "failed")
+
+    get "/api/v1/merchants/#{merchant.id}/customers_with_pending_invoices"
+    expect(response).to be_success
+
+    raw_customers = JSON.parse(response.body)
+    expect([raw_customers.first["id"], raw_customers.last["id"]]).to include(customer2.id)
+    expect([raw_customers.first["id"], raw_customers.last["id"]]).to include(customer3.id)
+    expect(raw_customers.length).to eq(2)
+  end
 end

@@ -47,10 +47,14 @@ Rails.application.routes.draw do
         get "/find_all", to: "find_merchants#index"
         get "/find", to: "find_merchants#show"
         get "/random", to: "random_merchants#show"
+        get "/revenue", to: "merchant_revenues#index"
+        get "/most_revenue", to: "top_merchants_by_revenue#index"
+        get "/most_items", to: "top_merchants_by_items_sold#index"
+        get "/:id/customers_with_pending_invoices", to: "unpaid_invoices#index"
+        get "/:id/revenue", to: "merchant_revenues#show"
         get "/:id/items", to: "merchant_items#index"
         get "/:id/invoices", to: "merchant_invoices#index"
         get "/:id/favorite_customer", to: "merchant_favorite_customers#show"
-        get "/:id/revenue", to: "merchant_revenues#show"
       end
 
       namespace :invoice_items do

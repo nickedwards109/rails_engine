@@ -40,4 +40,46 @@ RSpec.describe Merchant, type: :model do
 
       expect(merchant.total_revenue_scoped_to(date1)[:revenue]).to eq("6750.00")
     end
+
+    it "can find a variable number of top merchants ranked by revenue" do
+      merchant1 = create(:merchant)
+      merchant2 = create(:merchant)
+
+      invoice1 = create(:invoice, merchant_id: merchant1.id)
+      invoice1_item1 = create(:invoice_item, unit_price: "5250",
+                             invoice_id: invoice1.id, quantity: 1)
+      invoice1_item2 = create(:invoice_item, unit_price: "5250",
+                             invoice_id: invoice1.id, quantity: 2)
+      transaction1 = create(:transaction, invoice_id: invoice1.id)
+
+      invoice2 = create(:invoice, merchant_id: merchant2.id)
+      invoice2_item1 = create(:invoice_item, unit_price: "2250",
+                             invoice_id: invoice2.id, quantity: 1)
+      invoice2_item2 = create(:invoice_item, unit_price: "2250",
+                             invoice_id: invoice2.id, quantity: 2)
+      transaction2 = create(:transaction, invoice_id: invoice2.id)
+
+      expect(Merchant.top_ranked_by_revenue(1).first["id"]).to eq(merchant1.id)
+      expect(Merchant.top_ranked_by_revenue(2).first["id"]).to eq(merchant1.id)
+      expect(Merchant.top_ranked_by_revenue(2).last["id"]).to eq(merchant2.id)
+    end
+
+    it "can find a variable number of top merchants ranked by number of items sold" do
+      merchant1 = create(:merchant)
+      merchant2 = create(:merchant)
+
+      invoice1 = create(:invoice, merchant_id: merchant1.id)
+      invoice1_item1 = create(:invoice_item, invoice_id: invoice1.id, quantity: 5)
+      invoice1_item2 = create(:invoice_item, invoice_id: invoice1.id, quantity: 5)
+      transaction1 = create(:transaction, invoice_id: invoice1.id)
+
+      invoice2 = create(:invoice, merchant_id: merchant2.id)
+      invoice2_item1 = create(:invoice_item, invoice_id: invoice2.id, quantity: 1)
+      invoice2_item2 = create(:invoice_item, invoice_id: invoice2.id, quantity: 1)
+      transaction2 = create(:transaction, invoice_id: invoice2.id)
+
+      expect(Merchant.top_ranked_by_items_sold(1).first["id"]).to eq(merchant1.id)
+      expect(Merchant.top_ranked_by_items_sold(2).first["id"]).to eq(merchant1.id)
+      expect(Merchant.top_ranked_by_items_sold(2).last["id"]).to eq(merchant2.id)
+    end
 end

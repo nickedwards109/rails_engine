@@ -22,4 +22,42 @@ RSpec.describe Customer, type: :model do
 
     expect(Customer.favorite_customer(merchant.id).id).to eq(good_customer.id)
   end
+
+  it "can find a merchant's customers who have not paid their invoices" do
+    customer1 = create(:customer)
+    customer2 = create(:customer)
+    customer3 = create(:customer)
+    merchant = create(:merchant)
+
+    paid_invoice1 = create(:invoice, merchant_id: merchant.id,
+                          customer_id: customer1.id)
+    paid_transaction1 = create(:transaction, invoice_id: paid_invoice1.id,
+                              result: "success")
+    unpaid_invoice1 = create(:invoice, merchant_id: merchant.id,
+                            customer_id: customer1.id)
+    unpaid_transaction1 = create(:transaction, invoice_id: unpaid_invoice1.id,
+                                result: "failed")
+
+    unpaid_invoice2 = create(:invoice, merchant_id: merchant.id,
+                            customer_id: customer2.id)
+    unpaid_transaction2 = create(:transaction, invoice_id: unpaid_invoice2.id,
+                                result: "failed")
+
+    unpaid_invoice3 = create(:invoice, merchant_id: merchant.id,
+                            customer_id: customer3.id)
+    unpaid_transaction3 = create(:transaction, invoice_id: unpaid_invoice3.id,
+                                result: "failed")
+
+    expect([
+    Customer.unpaid_invoices(merchant.id).first[:id],
+    Customer.unpaid_invoices(merchant.id).last[:id],
+    ]).to include(customer2.id)
+
+    expect([
+    Customer.unpaid_invoices(merchant.id).first[:id],
+    Customer.unpaid_invoices(merchant.id).last[:id],
+    ]).to include(customer3.id)
+    
+    expect(Customer.unpaid_invoices(merchant.id).length).to eq(2)
+  end
 end
