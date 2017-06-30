@@ -1,24 +1,23 @@
-# README
+# Rails Engine Documentation
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This application creates an API for a series of merchants and their transactions, invoices, items, and customers.
 
-Things you may want to cover:
+This application uses:
+  * Ruby version 2.3.3
+  * Rails version 5.1.2
+  * PostgreSQL version 9.6.1
 
-* Ruby version
+In order to run Rails Engine, starting by cloning the repository:
 
-* System dependencies
+ * From your command line run *git clone https://github.com/nickedwards109/rails_engine.git*
+ * cd into the *rails_engine* folder
 
-* Configuration
+  Then run the following commands in succession:
+ * *bundle*
+ * *rake db:create*
+ * *rake db:migrate*
+ * *rake csv:import*
 
-* Database creation
+Note: It takes 3-5 minutes to import the dataset so please be patient!
 
-* Database initialization
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
