@@ -36,4 +36,33 @@ class Merchant < ApplicationRecord
     formatted_revenue = format_to_currency(revenue)
     {revenue: formatted_revenue}
   end
+
+  def self.top_ranked_by_revenue(quantity)
+    top_merchants = Merchant.find_by_sql("
+    SELECT merchants.*,
+    SUM(CAST(invoice_items.unit_price AS float) * invoice_items.quantity)
+    AS revenue
+    FROM merchants
+    INNER JOIN invoices ON invoices.merchant_id = merchants.id
+    INNER JOIN transactions ON transactions.invoice_id = invoices.id
+    INNER JOIN invoice_items ON invoice_items.invoice_id = invoices.id
+    WHERE transactions.result = 'success'
+    GROUP BY merchants.id
+    ORDER BY revenue DESC
+    LIMIT #{quantity} ;")
+  end
+
+  def self.top_ranked_by_items_sold(quantity)
+    top_merchants = Merchant.find_by_sql("
+    SELECT merchants.*,
+    SUM(invoice_items.quantity) AS quantity
+    FROM merchants
+    INNER JOIN invoices ON invoices.merchant_id = merchants.id
+    INNER JOIN transactions ON transactions.invoice_id = invoices.id
+    INNER JOIN invoice_items ON invoice_items.invoice_id = invoices.id
+    WHERE transactions.result = 'success'
+    GROUP BY merchants.id
+    ORDER BY quantity DESC
+    LIMIT #{quantity} ;")
+  end
 end
