@@ -22,7 +22,7 @@ Note: It takes 3-5 minutes to import the dataset so please be patient!
 
 You can optionally run the specs by running *rspec*.
 
-The following endpoints are available:
+To request an API endpoint, first run *rails s*. Then, prepend 'http://localhost:3000' before the endpoint path in your browser's URL bar and send the request. Your browser will then receive data as a JSON object. The following endpoints are available:
 
 * GET '/api/v1/customers/random'
 * GET '/api/v1/customers/:id/favorite_merchant'
