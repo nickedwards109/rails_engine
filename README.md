@@ -7,22 +7,7 @@ This application uses:
   * Rails version 5.1.2
   * PostgreSQL version 9.6.1
 
-In order to run Rails Engine, starting by cloning the repository:
-
- * From your command line run *git clone https://github.com/nickedwards109/rails_engine.git*
- * cd into the *rails_engine* folder
-
-Then run the following commands in succession:
- * *bundle*
- * *rake db:create*
- * *rake db:migrate*
- * *rake csv:import*
-
-Note: It takes 3-5 minutes to import the dataset so please be patient!
-
-You can optionally run the specs by running *rspec*.
-
-To request an API endpoint, first run *rails s*. Then, prepend 'http://localhost:3000' before the endpoint path in your browser's URL bar and send the request. Your browser will then receive data as a JSON object. The following endpoints are available:
+To request an API endpoint, prepend 'https://cody-nick-rails-engine.herokuapp.com' before the endpoint path in your browser's URL bar and send the request. Your browser will then receive data as a JSON object. The following endpoints are available:
 
 * GET '/api/v1/customers/random'
 * GET '/api/v1/customers/:id/favorite_merchant'
