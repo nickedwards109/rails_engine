@@ -7,7 +7,12 @@ This application uses:
   * Rails version 5.1.2
   * PostgreSQL version 9.6.1
 
-To request an API endpoint, prepend 'https://cody-nick-rails-engine.herokuapp.com' before the endpoint path in your browser's URL bar and send the request. Your browser will then receive data as a JSON object. The following endpoints are available:
+Once you've cloned this repository, you'll need to run the following commands in your terminal:
+
+* rails db:setup - to create the database and prepare the tables & columns according to the schema
+* rake csv:import - to import the sales data via rake task
+
+To request an API endpoint, prepend http://198.199.107.127/ before the endpoint path in your browser's URL bar and send the request. Your browser will then receive data as a JSON object. The following endpoints are available:
 
 * GET '/api/v1/customers/random'
 * GET '/api/v1/customers/:id/favorite_merchant'
