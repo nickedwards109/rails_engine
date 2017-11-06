@@ -1,6 +1,6 @@
 # Rails Engine Documentation
 
-This application creates an API for a series of merchants and their transactions, invoices, items, and customers.
+Rails Engine is a public-facing API which serves business intelligence via JSON. It's recommended that you use a browser extension such as [JSONView](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc) to prettify all that sweet, sweet JSON. 
 
 This application uses:
   * Ruby version 2.3.3
