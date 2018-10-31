@@ -1,6 +1,8 @@
 # Rails Engine Documentation
 
-Rails Engine is a public-facing API which serves business intelligence via JSON. It's recommended that you use a browser extension such as [JSONView](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc) to prettify all that sweet, sweet JSON. 
+Rails Engine is a public-facing API which serves business intelligence via JSON. Please feel free to reach out to the developers for examples of the API deployed to production. In order to host the API on your local machine, please keep on reading!
+
+It's recommended that you use a browser extension such as [JSONView](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc) to prettify all that sweet, sweet JSON. 
 
 This application uses:
   * Ruby version 2.3.3
@@ -11,8 +13,10 @@ Once you've cloned this repository, you'll need to run the following commands in
 
 * rails db:setup - to create the database and prepare the tables & columns according to the schema
 * rake csv:import - to import the sales data via rake task
+* rails server - to launch a web server on your local machine
 
-To request an API endpoint, prepend http://198.199.107.127/ before the endpoint path in your browser's URL bar and send the request. Your browser will then receive data as a JSON object. The following endpoints are available:
+To request an endpoint, prepend http://localhost:3000 before the endpoint path in your browser's URL bar and send the request. Your browser will then receive data as a JSON object. 
+The following endpoints are available:
 
 * GET '/api/v1/customers/random'
 * GET '/api/v1/customers/:id/favorite_merchant'
